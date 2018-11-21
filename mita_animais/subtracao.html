@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html lang=”pt-br”>
+
+ <!-- bootstrap - link cdn -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!--instalação da fonte awesome-->
+    <link href="bibliotecas/font-awesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+
+    <!-- incluindo css -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="images/favicon.ico" />
+
+<head>
+	<title> Mitã - jogo da subtração </title>
+	<meta charset="utf-8"/>
+
+	<script>
+
+		var num1, num2, resultado, posicao, errado1, errado2;
+
+		window.onload = Inicia;
+			
+		function Inicia(){
+			document.getElementById("msg").innerText = "Selecione uma opção";	
+			document.getElementById("1").disabled = false;
+			document.getElementById("2").disabled = false;
+			document.getElementById("3").disabled = false;
+
+			//oculta todas as imagens
+			for (i = 0; i<10; i++){							
+				document.getElementById("num1-" + (i+1)).style.display = "none";
+				document.getElementById("num2-" + (i+1)).style.display = "none";				
+			}
+			for (i=0; i<10; i++){
+				document.getElementById("res-" + (i+1)).style.display = "none";
+			}
+			
+
+			
+			num1=0
+			num2=0
+			errado1=0
+			errado2=0
+			//Sorteia os numeros
+			while(num1==0 || num1>10)
+				num1 = (Math.floor(Math.random() * 10))
+			while(num2==0 || num2>num1)
+				num2 = (Math.floor(Math.random() * 10))
+
+			resultado = num1 - num2;
+			//sorteia duas respostas  (erradas)
+			while(errado1 == resultado){
+				errado1 = (Math.floor(Math.random() * 10))
+			}
+
+			while( errado2 == resultado || errado2 == errado1){
+				errado2 = (Math.floor(Math.random() * 10))
+			}
+
+			//alert("chegou aqui")
+			//mostra os numeros sorteados
+			document.getElementById("op1").src = "imagens/" + num1 + ".jpg";
+			document.getElementById("op2").src = "imagens/" + num2 + ".jpg";	
+			document.getElementById("resp").src = "imagens/interrogacao.jpg";
+
+			
+
+			//sorteia em qual botão vai ficar o resultado
+
+			posicao = 0
+			while (posicao ==0 || posicao > 3)
+				posicao = (Math.floor(Math.random() * 10))
+
+			
+
+			// mostra os números nos botões
+			if (posicao == 1){
+		
+				document.getElementById("1").innerHTML = resultado.toString();
+				document.getElementById("2").innerHTML = errado1.toString();
+				document.getElementById("3").innerHTML = errado2.toString();
+			}
+			if (posicao == 2){
+				
+				document.getElementById("1").innerHTML = errado1.toString();
+				document.getElementById("2").innerHTML = resultado.toString();
+				document.getElementById("3").innerHTML = errado2.toString();
+			}
+			if (posicao == 3){
+			
+				document.getElementById("1").innerHTML = errado1.toString();
+				document.getElementById("2").innerHTML = errado2.toString();
+				document.getElementById("3").innerHTML= resultado.toString();
+			}
+
+			//mostra as imagens dos números
+			
+			
+			for (i = 0; i<num1; i++){										
+				document.getElementById("num1-" + (i+1)).style.display = "inline";
+			}
+			for (i = 0; i<num2; i++){			
+				document.getElementById("num2-" + (i+1)).style.display = "inline";
+			}
+			
+
+			
+
+
+		}
+
+
+		function joga(botao){
+			if(botao==posicao){
+				document.getElementById("resp").src =  "imagens/" + resultado + ".jpg";
+				document.getElementById("msg").innerText = "Acertou, parabéns!";	
+				document.getElementById("1").disabled = true;
+				document.getElementById("2").disabled = true;
+				document.getElementById("3").disabled = true;
+
+				for (i = 0; i<resultado; i++){			
+					document.getElementById("res-" + (i+1)).style.display = "inline";
+				}
+			
+
+			} else {
+				document.getElementById("msg").innerText = "Tente novamente";				
+			}
+
+		}
+		
+
+	</script>
+	
+</head>
+<body  style="font-size:20px;" bgcolor="#F8F8FF">
+	 <div class="container">
+	 	<div class="row">
+	 		<div class = "col-11 text-center">
+	 			<h2 id="titulo"> Mitã -  Jogo da Subtração  </h2>		
+	 		</div>
+	 	</div>
+ 		<div class = "row">
+	 		<div class="col-3 text-center" >
+					 <img class= "imagem img" src="imagens/1.jpg" id="op1"  /> 
+			</div>
+
+			<div class="col-1 text-center">
+					 <img class= "imagem img" src="imagens/-.jpg" id="s+"  /> 
+			</div>
+
+			<div class="col-3 text-center">
+					 <img class= "imagem img" src="imagens/2.jpg" id="op2"  /> 
+			</div>
+
+			<div class="col-1 text-center">
+					 <img class= "imagem img" src="imagens/=.jpg" id="s="  /> 					 
+			</div>
+
+			<div class="col-3 text-center">
+					 <img class= "imagem img" src="imagens/interrogacao.jpg" id="resp"  /> 					 
+			</div>
+		</div>
+		<div class = "row">
+			<div class = "col-3 text-center">
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-1"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-2"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-3"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-4"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-5"  />				
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-6"  />				
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-7"  />				
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-8"  />				
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-9"  />				
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num1-10"  />				
+			</div>		
+
+			<div class="col-1 text-center">
+					 <img class= "imagem img" src="imagens/-.jpg" id="s+"  /> 
+			</div>
+
+			<div class = "col-3 text-center" >
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-1"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-2"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-3"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-4"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-5"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-6"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-7"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-8"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-9"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="num2-10"  />
+			</div>
+			<div class="col-1 text-center">
+					 <img class= "imagem img" src="imagens/=.jpg" id="s="  /> 					 
+			</div>
+			<div class = "col-3 text-center" >
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-1"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-2"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-3"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-4"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-5"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-6"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-7"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-8"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-9"  />
+				<img class= "imagem img" src="imagens/esmalte.jpg" id="res-10"  />
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-11 text-center">
+				
+					<h2 id="msg"> Selecione uma opção </h2>
+
+				<button class="btn-outline-warning btn-lg" id = "1" onclick="joga(1)"> Opção1 </button> 
+				<button class="btn-outline-warning btn-lg" id = "2" onclick="joga(2)"> Opção2 </button>
+				<button class="btn-outline-warning btn-lg" id = "3" onclick="joga(3)"> Opção3 </button>				
+
+				<input type = "button"   class="btn btn-dark btn-lg" value = "Reiniciar" onclick = "Inicia()" /> <br> <br>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

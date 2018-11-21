@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+<head>
+    
+</head>
+<body style="font-size:20px;" bgcolor="#F8F8FF">
+
+    <div class="div_inteira justify-content-center">
+        <button type="button" id="btn-memoria" class="btn btn-outline-light" data-toggle="modal" data-target="#jogo-memoria">Jogo da Memória</button>
+        <div class="modal fade" id="jogo-memoria" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+            
+                    <div id="jogo_memoria">
+
+                        <script>
+                                numeros = new Array(5);
+                                sorteados = new Array(10);
+
+                                var img_atual = ''; 
+                                var posicao_primeiro;
+                                var img_busca;
+                                var bloqueio;
+
+
+                                var i;
+                                var continua;
+                                var clicou;
+                                var jogada;
+                                var jogadas;
+                                var acertos = 0
+
+                                //Inicia();
+
+                                //viraCartas();
+
+                                function IniciaMemoria(){
+
+                                    jogada = 1;
+                                    jogadas = 0;
+                                    clicou = false;
+                                    acertos  = 0;
+                                    bloqueio = false;
+                                    sorteados= [];
+                                    numeros= [];
+                                    
+                                    //sorteia os numeros 
+                                    for(i=0; i<4; i++){
+                                        continua = true 
+                                        while(continua){
+                                            continua = false;
+                                            num = (Math.floor(Math.random() * 10))
+                                            
+                                                                
+                                            for (var j = 0; j<=i; j++){
+                                                if (num == numeros[j] || num > 9)       
+                                                    continua = true 
+                                            }
+                                        
+                                        }
+                                        numeros[i] = num;
+                                    }
+
+
+
+                                    i=0;
+                                    for(j=0; j<4; j++){
+                                        continua = true 
+                                        while(continua){
+                                            continua = false;
+
+                                            ordem = (Math.floor(Math.random() * 10))
+                                            //alert(num)
+                                            if (sorteados[ordem] || ordem >7)       
+                                                continua = true 
+                                        }               
+                                        sorteados[ordem] = '1'+'-'+(numeros[i]+1)+'.jpg';
+                                        i++;
+                                    }
+                                    i=0;
+                                    for(j=0; j<4; j++){
+                                        continua = true 
+                                        while(continua){
+                                            continua = false;
+                                            ordem = (Math.floor(Math.random() * 10))
+                                            //alert(num)
+                                            if (sorteados[ordem] || ordem >7)       
+                                                continua = true 
+                                        }               
+                                        sorteados[ordem] = '2'+'-'+(numeros[i]+1)+'.jpg';
+                                        i++;
+                                    }
+                                    //mostra as imagens selecionadas
+                                    
+                                        
+                                    viraCartas();                   
+                                    
+                                    
+
+                                    
+                                    
+                                    
+                                }
+
+                                function viraCartas(){
+                                    setTimeout(function(){
+                                    for(i=0; i<=7; i++){
+                                            document.getElementById('titulo').innerText = "Memorize os números"
+                                            document.getElementById(i.toString()).src = 'imagens/' + sorteados[i];
+                                            document.getElementById('jogada').style.display = "none"; 
+                                        }
+                                    },1)
+                                    setTimeout(function(){
+                                        for(i=0; i<=7; i++){
+
+                                            document.getElementById('titulo').innerText = "Clique sobre os cartões"
+                                            document.getElementById(i.toString()).src = 'imagens/cartao.png' 
+                                            document.getElementById('jogada').style.display = "block"; 
+                                        }
+
+                                            document.getElementById("jogada").value = 'Jogadas: ' + jogadas; 
+                                                            
+                                    },5000)
+
+                                }
+
+                                
+                                
+
+                            
+                                function Mostra(img){
+                                    //Ao clicar mostra a imagem
+
+                                    if (acertos < 4 && bloqueio == false){
+
+                                        imag = +(img);          
+
+                                        document.getElementById(img).src = 'imagens/' + sorteados[img];
+                                        
+                                        if (jogada == 1){       
+                                            
+                                            posicao_primeiro = imag;    
+                                            img_busca = document.getElementById(img).src.substring(document.getElementById(img).src.length - 6);    
+                                            img_atual = document.getElementById(img).src.substring(document.getElementById(img).src.length - 8);
+                                            jogada = 2;
+                                            
+                                        }else{
+                                            clicou = true;
+                                            Verifica(img);                  
+                                        }
+                                        
+                                    }   
+                                        
+                                }
+
+                                
+                                function Verifica(img){
+                                    
+
+                                    if (acertos <= 4){
+
+                                        if (jogada == 2 && clicou == true){
+                                            
+                                            
+                                                var img_comp = document.getElementById(img).src.substring(document.getElementById(img).src.length - 6);
+                                                var img_nome = document.getElementById(img).src.substring(document.getElementById(img).src.length - 8);
+
+                                                
+                                                if (img_comp  != img_busca || img_nome == img_atual ){  
+                                                    bloqueio = true;
+                                                    setTimeout(function(){
+                                                        document.getElementById(img).src = "imagens/cartao.png";
+                                                        document.getElementById(posicao_primeiro.toString()).src = "imagens/cartao.png";
+                                                        bloqueio = false;
+                                                    },1000)
+                                                        
+                                                    
+                                                }else{
+                                                    acertos++;
+                                                    if (acertos == 4)
+                                                    document.getElementById('titulo').innerText = "Fim de jogo. Clique novamente no botão Iniciar"
+                                            
+                                                }
+
+                                            jogada = 1;
+                                            jogadas++;
+
+                                        }else{
+                                            if (clicou == true){
+                                                    jogada = 2;
+                                            }
+                                        }
+                                        clicou = false;
+                                        document.getElementById("jogada").value = 'Jogadas: ' + jogadas;                
+                                    }   
+                                }
+                        </script>
+
+                            <h2 id="titulo"> Jogo da Memória </h2> 
+                            
+                            <div class="container">
+                                
+                                
+
+                                <div class="row justify-content-center">
+
+                                            <div class="row pt-3">
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="0" onclick = "Mostra('0')" />
+                                                </div>
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="1" onclick = "Mostra('1')" />
+                                                </div>
+                                                <div class="col">   
+                                                    <img class= "imagem" src="imagens/cartao.png" id="2" onclick = "Mostra('2')" />
+                                                </div>
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="3" onclick = "Mostra('3')" />
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="row pt-3">
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="4" onclick = "Mostra('4')" />
+                                                </div>
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="5" onclick = "Mostra('5')" />
+                                                </div>
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="6" onclick = "Mostra('6')" /> 
+                                                </div>
+                                                <div class="col">
+                                                    <img class= "imagem" src="imagens/cartao.png" id="7" onclick = "Mostra('7')" />
+                                                </div>                      
+                                            </div>    
+                                </div>
+                            </div>
+
+                            <br>
+                            <br>
+                                <div class="row justify-content-center">            
+                                    <input type = "button" value = "Iniciar" onclick = "IniciaMemoria()" /> 
+                                    <input type = "text" style="font-size:20px; text-align:center"   size = "10" id = "jogada" value = "Jogadas: 0" desabled /> <br> <br>
+                                </div>
+                            
+                            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+                            <script src="js/bootstrap.js"></script>
+                    </div>
+                </div>        
+            </div>            
+        </div>
+
+
+
+        <button type="button" id="btn-soma" class="btn btn-outline-light" data-toggle="modal" data-target="#jogo_soma" onclick="IniciaSoma()">Jogo da Soma</button>
+        <div class="modal fade" id="jogo_soma" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+            
+                    <div id="jogo_soma">
+
+                        <script>
+
+                            var num1, num2, resultado, posicao, errado1, errado2;
+
+                          //  window.onload = IniciaSoma;
+                                
+                            function IniciaSoma(){
+                                document.getElementById("soma_msg").innerText = "Selecione uma opção:";   
+                                document.getElementById("soma_1").disabled = false;
+                                document.getElementById("soma_2").disabled = false;
+                                document.getElementById("soma_3").disabled = false;
+
+                                /* //oculta todas as imagens
+                                for (i = 0; i<5; i++){                          
+                                    document.getElementById("soma_num1-" + (i+1)).style.display = "none";
+                                    document.getElementById("soma_num2-" + (i+1)).style.display = "none";                
+                                }
+                                for (i=0; i<10; i++){
+                                    document.getElementById("soma_res-" + (i+1)).style.display = "none";
+                                }
+                                */
+
+                                
+                                num1=0
+                                num2=0
+                                errado1=0
+                                errado2=0
+                                //Sorteia os numeros
+                                while(num1==0 || num1>5)
+                                    num1 = (Math.floor(Math.random() * 10))
+                                while(num2==0 || num2>5)
+                                    num2 = (Math.floor(Math.random() * 10))
+
+                                resultado = num1 + num2;
+                                //sorteia duas respostas  (erradas)
+                                while(errado1==0 || errado1 == resultado){
+                                    errado1 = (Math.floor(Math.random() * 10))
+                                }
+
+                                while(errado2==0 || errado2 == resultado || errado2 == errado1){
+                                    errado2 = (Math.floor(Math.random() * 10))
+                                }
+
+                                
+                                //mostra os numeros sorteados
+                                document.getElementById("soma_op1").src = "imagens/" + num1 + ".jpg";
+                                document.getElementById("soma_op2").src = "imagens/" + num2 + ".jpg";    
+                                document.getElementById("soma_resp").src = "imagens/interrogacao.jpg";
+
+                                
+
+                                //sorteia em qual botão vai ficar o resultado
+
+                                posicao = 0
+                                while (posicao ==0 || posicao > 3)
+                                    posicao = (Math.floor(Math.random() * 10))
+
+                                
+
+                                // mostra os números nos botões
+                                //alert('chegou aqui');
+                                if (posicao == 1){
+                            
+                                    document.getElementById("soma_1").innerHTML = resultado.toString();
+                                    document.getElementById("soma_2").innerHTML = errado1.toString();
+                                    document.getElementById("soma_3").innerHTML = errado2.toString();
+                                }
+                                if (posicao == 2){
+                                    
+                                    document.getElementById("soma_1").innerHTML = errado1.toString();
+                                    document.getElementById("soma_2").innerHTML = resultado.toString();
+                                    document.getElementById("soma_3").innerHTML = errado2.toString();
+                                }
+                                if (posicao == 3){
+                                
+                                    document.getElementById("soma_1").innerHTML = errado1.toString();
+                                    document.getElementById("soma_2").innerHTML = errado2.toString();
+                                    document.getElementById("soma_3").innerHTML= resultado.toString();
+                                }
+
+                                //mostra as imagens dos números
+                                
+                                /*
+                                for (i = 0; i<num1; i++){                                       
+                                    document.getElementById("soma_num1-" + (i+1)).style.display = "inline";
+                                }
+                                for (i = 0; i<num2; i++){           
+                                    document.getElementById("soma_num2-" + (i+1)).style.display = "inline";
+                                }*/
+                                
+
+                                
+
+
+                            }
+
+
+                            function jogaSoma(botao){
+                                if(botao==posicao){
+                                    document.getElementById("soma_resp").src =  "imagens/" + resultado + ".jpg";
+                                    document.getElementById("soma_msg").innerText = "Acertou, parabéns!";    
+                                    document.getElementById("soma_1").disabled = true;
+                                    document.getElementById("soma_2").disabled = true;
+                                    document.getElementById("soma_3").disabled = true;
+
+                                    for (i = 0; i<resultado; i++){          
+                                        document.getElementById("soma_res-" + (i+1)).style.display = "inline";
+                                    }
+                                
+
+                                } else {
+                                    document.getElementById("soma_msg").innerText = "Tente novamente";               
+                                }
+
+                            }
+                            
+
+                        </script>
+
+
+                        <div class="container">
+                            <div class="row">
+                                <div class = "col-12 text-center">
+                                    <h2 id="titulo_soma"> Mitã -  Jogo da Soma  </h2>        
+                                </div>
+                            </div>
+                            <div class = "row">
+                                <div class="col-3 text-center" >
+                                         <img class= "imagem img" src="imagens/1.jpg" id="soma_op1"  /> 
+                                </div>
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/+.jpg" id="soma_s+"  /> 
+                                </div>
+
+                                <div class="col-3 text-center">
+                                         <img class= "imagem img" src="imagens/2.jpg" id="soma_op2"  /> 
+                                </div>
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/=.jpg" id="soma_s="  />                    
+                                </div>
+
+                                <div class="col-4 text-center">
+                                         <img class= "imagem img" src="imagens/interrogacao.jpg" id="soma_resp"  />                   
+                                </div>
+                            </div>
+                            <!--
+                            <div class = "row">
+                                <div class = "col-3 text-center">
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num1-1"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num1-2"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num1-3"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num1-4"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num1-5"  />                
+                                </div>      
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/+.jpg" id="soma_s+"  /> 
+                                </div>
+
+                                <div class = "col-3 text-center" >
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num2-1"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num2-2"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num2-3"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num2-4"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_num2-5"  />
+                                </div>
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/=.jpg" id="soma_s="  />                    
+                                </div>
+                                <div class = "col-4 text-center" >
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-1"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-2"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-3"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-4"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-5"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-6"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-7"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-8"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-9"  />
+                                    <img class= "imagem img" src="imagens/batom.jpg" id="soma_res-10"  />
+                                </div>
+                            </div>-->
+                            
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <div class="row">
+                                        <h2 id="soma_msg"> Selecione uma opção: </h2>
+                                        <button class="btn-outline-warning btn-lg" id = "soma_1" onclick="jogaSoma(1)"> Opção1 </button> 
+                                        <button class="btn-outline-warning btn-lg" id = "soma_2" onclick="jogaSoma(2)"> Opção2 </button>
+                                        <button class="btn-outline-warning btn-lg" id = "soma_3" onclick="jogaSoma(3)"> Opção3 </button>
+                                    </div>
+
+                                                 
+
+                                    <input type = "button"   class="btn btn-dark btn-lg" value = "Reiniciar" onclick = "IniciaSoma()" /> <br> <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>            
+        </div>
+
+
+
+        <button type="button" id="btn-subtracao" class="btn btn-outline-light" data-toggle="modal" data-target="#jogo_subtracao" onclick="IniciaSubtracao()">Jogo da Subtração</button>
+        <div class="modal fade" id="jogo_subtracao" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+            
+                    <div id="jogo_subtracao">
+
+                        <script>
+
+                            var num1, num2, resultado, posicao, errado1, errado2;
+
+                            //window.onload = IniciaSubtracao;
+                                
+                            function IniciaSubtracao(){
+                                document.getElementById("subtracao_msg").innerText = "Selecione uma opção:";   
+                                document.getElementById("subtracao_1").disabled = false;
+                                document.getElementById("subtracao_2").disabled = false;
+                                document.getElementById("subtracao_3").disabled = false;
+
+                                /*//oculta todas as imagens
+                                for (i = 0; i<10; i++){                         
+                                    document.getElementById("subtracao_num1-" + (i+1)).style.display = "none";
+                                    document.getElementById("subtracao_num2-" + (i+1)).style.display = "none";                
+                                }
+                                for (i=0; i<10; i++){
+                                    document.getElementById("subtracao_res-" + (i+1)).style.display = "none";
+                                }
+                                */
+
+                                
+                                num1=0
+                                num2=0
+                                errado1=0
+                                errado2=0
+                                //Sorteia os numeros
+                                while(num1==0 || num1>10)
+                                    num1 = (Math.floor(Math.random() * 10))
+                                while(num2==0 || num2>num1)
+                                    num2 = (Math.floor(Math.random() * 10))
+
+                                resultado = num1 - num2;
+                                //sorteia duas respostas  (erradas)
+                                while(errado1 == resultado){
+                                    errado1 = (Math.floor(Math.random() * 10))
+                                }
+
+                                while( errado2 == resultado || errado2 == errado1){
+                                    errado2 = (Math.floor(Math.random() * 10))
+                                }
+
+                                
+                                //mostra os numeros sorteados
+                                document.getElementById("subtracao_op1").src = "imagens/" + num1 + ".jpg";
+                                document.getElementById("subtracao_op2").src = "imagens/" + num2 + ".jpg";    
+                                document.getElementById("subtracao_resp").src = "imagens/interrogacao.jpg";
+
+                                
+
+                                //sorteia em qual botão vai ficar o resultado
+
+                                posicao = 0
+                                while (posicao ==0 || posicao > 3)
+                                    posicao = (Math.floor(Math.random() * 10))
+
+                                
+
+                                // mostra os números nos botões
+                                if (posicao == 1){
+                            
+                                    document.getElementById("subtracao_1").innerHTML = resultado.toString();
+                                    document.getElementById("subtracao_2").innerHTML = errado1.toString();
+                                    document.getElementById("subtracao_3").innerHTML = errado2.toString();
+                                }
+                                if (posicao == 2){
+                                    
+                                    document.getElementById("subtracao_1").innerHTML = errado1.toString();
+                                    document.getElementById("subtracao_2").innerHTML = resultado.toString();
+                                    document.getElementById("subtracao_3").innerHTML = errado2.toString();
+                                }
+                                if (posicao == 3){
+                                
+                                    document.getElementById("subtracao_1").innerHTML = errado1.toString();
+                                    document.getElementById("subtracao_2").innerHTML = errado2.toString();
+                                    document.getElementById("subtracao_3").innerHTML= resultado.toString();
+                                }
+
+                                /*//mostra as imagens dos números
+                                
+                                
+                                for (i = 0; i<num1; i++){                                       
+                                    document.getElementById("subtracao_num1-" + (i+1)).style.display = "inline";
+                                }
+                                for (i = 0; i<num2; i++){           
+                                    document.getElementById("subtracao_num2-" + (i+1)).style.display = "inline";
+                                }*/
+                                
+
+                                
+
+
+                            }
+
+
+                            function jogaSubtracao(botao){
+                                if(botao==posicao){
+                                    document.getElementById("subtracao_resp").src =  "imagens/" + resultado + ".jpg";
+                                    document.getElementById("subtracao_msg").innerText = "Acertou, parabéns!";    
+                                    document.getElementById("subtracao_1").disabled = true;
+                                    document.getElementById("subtracao_2").disabled = true;
+                                    document.getElementById("subtracao_3").disabled = true;
+
+                                    for (i = 0; i<resultado; i++){          
+                                        document.getElementById("subtracao_res-" + (i+1)).style.display = "inline";
+                                    }
+                                
+
+                                } else {
+                                    document.getElementById("subtracao_msg").innerText = "Tente novamente";               
+                                }
+
+                            }
+                        </script>
+
+
+                        <div class="container">
+                            <div class="row">
+                                <div class = "col-11 text-center">
+                                    <h2 id="titulo"> Mitã -  Jogo da Subtração  </h2>       
+                                </div>
+                            </div>
+                            <div class = "row">
+                                <div class="col-3 text-center" >
+                                         <img class= "imagem img" src="imagens/1.jpg" id="subtracao_op1"  /> 
+                                </div>
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/-.jpg" id="subtracao_s+"  /> 
+                                </div>
+
+                                <div class="col-3 text-center">
+                                         <img class= "imagem img" src="imagens/2.jpg" id="subtracao_op2"  /> 
+                                </div>
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/=.jpg" id="subtracao_s="  />                    
+                                </div>
+
+                                <div class="col-3 text-center">
+                                         <img class= "imagem img" src="imagens/interrogacao.jpg" id="subtracao_resp"  />                   
+                                </div>
+                            </div>
+                            <!--
+                            <div class = "row">
+                                <div class = "col-3 text-center">
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-1"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-2"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-3"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-4"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-5"  />              
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-6"  />              
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-7"  />              
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-8"  />              
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-9"  />              
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num1-10"  />             
+                                </div>  
+
+
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/-.jpg" id="subtracao_s+"  /> 
+                                </div>
+
+                                <div class = "col-3 text-center" >
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-1"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-2"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-3"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-4"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-5"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-6"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-7"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-8"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-9"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_num2-10"  />
+                                </div>
+                                <div class="col-1 text-center">
+                                         <img class= "imagem img" src="imagens/=.jpg" id="subtracao_s="  />                    
+                                </div>
+                                <div class = "col-4 text-center" >
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-1"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-2"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-3"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-4"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-5"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-6"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-7"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-8"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-9"  />
+                                    <img class= "imagem img" src="imagens/esmalte.jpg" id="subtracao_res-10"  />
+                                </div>
+                            </div>-->
+                            
+                            <div class="row">
+                                <div class="col-11 text-center">
+                                    
+                                    <div class="row">
+                                        <h2 id="subtracao_msg"> Selecione uma opção </h2>
+
+                                        <button class="btn-outline-warning btn-lg" id = "subtracao_1" onclick="jogaSubtracao(1)"> Opção1 </button> 
+                                        <button class="btn-outline-warning btn-lg" id = "subtracao_2" onclick="jogaSubtracao(2)"> Opção2 </button>
+                                        <button class="btn-outline-warning btn-lg" id = "subtracao_3" onclick="jogaSubtracao(3)"> Opção3 </button>             
+                                    </div>
+
+                                    <input type = "button"   class="btn btn-dark btn-lg" value = "Reiniciar" onclick = "IniciaSubtracao()" />
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.js"></script>
+
+</body>
+</html>

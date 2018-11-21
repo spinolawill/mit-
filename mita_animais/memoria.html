@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang=”pt-br”>
+
+ <!-- bootstrap - link cdn -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!--instalação da fonte awesome-->
+    <link href="bibliotecas/font-awesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+
+    <!-- incluindo css -->
+    <link href="css/style-01.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="images/favicon.ico" />
+
+<head>
+	<title> Mitã - jogo da memória </title>
+	<meta charset="utf-8"/>
+
+	<script>
+
+	
+		numeros = new Array(5);
+		sorteados = new Array(10);
+
+		var img_atual = ''; 
+		var posicao_primeiro;
+		var img_busca;
+		var bloqueio;
+
+
+		var i;
+		var continua;
+		var clicou;
+		var jogada;
+		var jogadas;
+		var acertos = 0
+
+		//Inicia();
+
+		//viraCartas();
+
+		function Inicia(){
+
+			jogada = 1;
+			jogadas = 0;
+			clicou = false;
+			acertos  = 0;
+			bloqueio = false;
+			sorteados= [];
+			numeros= [];
+			
+			//sorteia os numeros 
+			for(i=0; i<4; i++){
+				continua = true 
+				while(continua){
+					continua = false;
+					num = (Math.floor(Math.random() * 10))
+					
+										
+					for (var j = 0; j<=i; j++){
+						if (num == numeros[j] || num > 9)		
+							continua = true 
+					}
+				
+				}
+				numeros[i] = num;
+			}
+
+
+
+			i=0;
+			for(j=0; j<4; j++){
+				continua = true 
+				while(continua){
+					continua = false;
+
+					ordem = (Math.floor(Math.random() * 10))
+					//alert(num)
+					if (sorteados[ordem] || ordem >7)		
+						continua = true 
+				}				
+				sorteados[ordem] = '1'+'-'+(numeros[i]+1)+'.jpg';
+				i++;
+			}
+			i=0;
+			for(j=0; j<4; j++){
+				continua = true 
+				while(continua){
+					continua = false;
+					ordem = (Math.floor(Math.random() * 10))
+					//alert(num)
+					if (sorteados[ordem] || ordem >7)		
+						continua = true 
+				}				
+				sorteados[ordem] = '2'+'-'+(numeros[i]+1)+'.jpg';
+				i++;
+			}
+			//mostra as imagens selecionadas
+			
+				
+			viraCartas();					
+			
+			
+
+			
+			
+			
+		}
+
+		function viraCartas(){
+			setTimeout(function(){
+			for(i=0; i<=7; i++){
+					document.getElementById('titulo').innerText = "Memorize os números"
+					document.getElementById(i.toString()).src = 'imagens/' + sorteados[i];
+					document.getElementById('jogada').style.display = "none"; 
+				}
+			},1)
+			setTimeout(function(){
+				for(i=0; i<=7; i++){
+
+					document.getElementById('titulo').innerText = "Clique sobre os cartões"
+					document.getElementById(i.toString()).src = 'imagens/cartao.png' 
+					document.getElementById('jogada').style.display = "block"; 
+				}
+
+					document.getElementById("jogada").value = 'Jogadas: ' + jogadas; 
+									
+			},5000)
+
+		}
+
+		
+		
+
+	
+		function Mostra(img){
+			//Ao clicar mostra a imagem
+
+			if (acertos < 4 && bloqueio == false){
+
+				imag = +(img);			
+
+				document.getElementById(img).src = 'imagens/' + sorteados[img];
+				
+				if (jogada == 1){		
+					
+					posicao_primeiro = imag;	
+					img_busca = document.getElementById(img).src.substring(document.getElementById(img).src.length - 6);	
+					img_atual = document.getElementById(img).src.substring(document.getElementById(img).src.length - 8);
+					jogada = 2;
+					
+				}else{
+					clicou = true;
+					Verifica(img);					
+				}
+				
+			}	
+				
+		}
+
+		
+		function Verifica(img){
+			
+
+			if (acertos <= 4){
+
+				if (jogada == 2 && clicou == true){
+					
+					
+						var img_comp = document.getElementById(img).src.substring(document.getElementById(img).src.length - 6);
+						var img_nome = document.getElementById(img).src.substring(document.getElementById(img).src.length - 8);
+
+						
+						if (img_comp  != img_busca || img_nome == img_atual ){	
+							bloqueio = true;
+							setTimeout(function(){
+								document.getElementById(img).src = "imagens/cartao.png";
+								document.getElementById(posicao_primeiro.toString()).src = "imagens/cartao.png";
+								bloqueio = false;
+							},1000)
+								
+							
+						}else{
+							acertos++;
+							if (acertos == 4)
+							document.getElementById('titulo').innerText = "Fim de jogo. Clique novamente no botão Iniciar"
+					
+						}
+
+					jogada = 1;
+					jogadas++;
+
+				}else{
+					if (clicou == true){
+							jogada = 2;
+					}
+				}
+				clicou = false;
+				document.getElementById("jogada").value = 'Jogadas: ' + jogadas; 				
+			}	
+		}
+	</script>
+	
+</head>
+<body  style="font-size:20px;" bgcolor="#F8F8FF">
+
+	
+
+	<h2 id="titulo"> Jogo da Memória </h2> 
+	
+	<div class="container">
+		
+		
+
+		<div class="row justify-content-center">
+
+
+
+					<div class="row pt-3">
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="0" onclick = "Mostra('0')" />
+						</div>
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="1" onclick = "Mostra('1')" />
+						</div>
+						<div class="col">	
+							<img class= "imagem" src="imagens/cartao.png" id="2" onclick = "Mostra('2')" />
+						</div>
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="3" onclick = "Mostra('3')" />
+						</div>
+						
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="4" onclick = "Mostra('4')" />
+						</div>
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="5" onclick = "Mostra('5')" />
+						</div>
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="6" onclick = "Mostra('6')" />	
+						</div>
+						<div class="col">
+							<img class= "imagem" src="imagens/cartao.png" id="7" onclick = "Mostra('7')" />
+						</div>						
+					</div>
+
+			
+	    </div>
+</div>
+
+	<br>
+	<br>
+		<div class="row justify-content-center">			
+			<input type = "button" value = "Iniciar" onclick = "Inicia()" /> 
+			<input type = "text" style="font-size:20px; text-align:center"   size = "10" id = "jogada" value = "Jogadas: 0" desabled /> <br> <br>
+		</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.js"></script>
+
+</body>
+</html>
